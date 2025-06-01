@@ -26,7 +26,7 @@
         color: white;
         padding: 15px 20px;
         display: flex;
-        justify-content: space-between;
+        justify-content: between;
         align-items: center;
     }
     
@@ -40,84 +40,44 @@
     .message {
         margin-bottom: 15px;
         display: flex;
-        flex-direction: column;
-        width: 100%;
+        align-items: flex-end;
     }
     
     .message.own {
-        align-items: flex-end;
+        justify-content: flex-end;
     }
     
     .message.other {
-        align-items: flex-start;
-    }
-    
-    .message.system {
-        align-items: center;
-    }
-    
-    .message-header {
-        font-size: 0.8rem;
-        color: #6c757d;
-        margin-bottom: 4px;
-        padding: 0 8px;
-        font-weight: 500;
-    }
-    
-    .message.own .message-header {
-        text-align: right;
-    }
-    
-    .message.other .message-header {
-        text-align: left;
-    }
-    
-    .message-wrapper {
-        display: flex;
-        align-items: flex-end;
-        max-width: 70%;
-        gap: 8px;
-    }
-    
-    .message.own .message-wrapper {
-        flex-direction: row-reverse;
-        margin-left: auto;
-    }
-    
-    .message.other .message-wrapper {
-        flex-direction: row;
-        margin-right: auto;
+        justify-content: flex-start;
     }
     
     .message-bubble {
-        padding: 12px 16px;
-        border-radius: 18px;
+        max-width: 80%;
+        min-width: 120px;
+        width: fit-content;
+        padding: 12px 20px;
+        border-radius: 25px;
         word-wrap: break-word;
         position: relative;
-        min-width: 60px;
+        display: block;
     }
     
-    .message.own .message-bubble {
-        background: linear-gradient(135deg, #adb5bd, #868e96) !important;
-        color: white !important;
-        border-bottom-right-radius: 2px;
-        border-top-left-radius: 18px;
-        border-top-right-radius: 18px;
-        border-bottom-left-radius: 18px;
-    }
-    
-    /* 強制覆蓋任何藍色樣式 */
-    .chat-container .message.own .message-bubble,
-    .message.own .message-wrapper .message-bubble {
-        background: linear-gradient(135deg, #adb5bd, #868e96) !important;
-        background-color: #adb5bd !important;
-    }
-    
-    .message.other .message-bubble {
+    .message-bubble.own {
         background: white;
         color: #333;
-        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-left: auto;
+        margin-right: 0;
+    }
+    
+    .message-bubble.other {
+        background: white;
+        color: #333;
+        border-bottom-left-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-left: 0;
+        margin-right: auto;
     }
     
     .message.system .message-bubble {
@@ -126,6 +86,7 @@
         font-style: italic;
         text-align: center;
         border-radius: 12px;
+        margin: 0 auto;
         max-width: 50%;
     }
     
@@ -134,14 +95,13 @@
         height: 35px;
         border-radius: 50%;
         object-fit: cover;
-        flex-shrink: 0;
+        margin: 0 8px;
     }
     
     .message-info {
         font-size: 0.75rem;
         color: #6c757d;
         margin-top: 4px;
-        padding: 0 8px;
     }
     
     .message.own .message-info {
@@ -153,16 +113,17 @@
     }
     
     .reply-preview {
-        background: rgba(255, 255, 255, 0.2);
-        border-left: 3px solid #fff;
-        padding: 8px 12px;
-        margin-bottom: 8px;
+        background: rgba(108, 117, 125, 0.15);
+        border-left: 4px solid #007bff;
+        padding: 10px 15px;
+        margin-bottom: 10px;
         border-radius: 8px;
         font-size: 0.9rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
     .message.other .reply-preview {
-        background: rgba(0, 0, 0, 0.05);
+        background: rgba(108, 117, 125, 0.15);
         border-left-color: #007bff;
     }
     
@@ -242,30 +203,6 @@
         cursor: pointer;
     }
     
-    /* 修復文件連結顏色 - 使用最高優先級覆蓋 Bootstrap */
-    .chat-container .message .message-bubble a,
-    .chat-container .message .message-bubble a:link,
-    .chat-container .message .message-bubble a:visited,
-    .chat-container .message .message-bubble a:hover,
-    .chat-container .message .message-bubble a:focus,
-    .chat-container .message .message-bubble a:active {
-        color: #ffffff !important;
-        text-decoration: underline !important;
-        font-weight: 600 !important;
-    }
-    
-    /* 文件圖標顏色 - 使用最高優先級 */
-    .chat-container .message .message-bubble a i,
-    .chat-container .message .message-bubble a .fas,
-    .chat-container .message .message-bubble a .fa {
-        color: #ffffff !important;
-    }
-    
-    /* 確保在所有狀態下都是白色 */
-    .chat-container .message-bubble a[href] {
-        color: #ffffff !important;
-    }
-    
     .typing-indicator {
         display: none;
         padding: 10px 20px;
@@ -276,16 +213,6 @@
     .participants-info {
         font-size: 0.9rem;
         opacity: 0.9;
-    }
-    
-    .message-actions {
-        opacity: 0;
-        transition: opacity 0.2s;
-        margin-left: 8px;
-    }
-    
-    .message:hover .message-actions {
-        opacity: 1;
     }
 </style>
 {% endblock %}
@@ -349,18 +276,15 @@
                 <!-- 聊天消息區域 -->
                 <div class="chat-messages" id="chatMessages">
                     {% for message in messages %}
-                        {% if message.message_type != 'system' %}
-                            <div class="message {% if message.sender == request.user %}own{% else %}other{% endif %}" {% if message.sender == request.user %}style="align-items: flex-end; text-align: right;"{% endif %}>
-                                <!-- 顯示發送者姓名 -->
-                                <div class="message-header">
-                                    {% if message.sender == request.user %}
-                                        您
-                                    {% else %}
-                                        {{ message.sender.username }}
-                                    {% endif %}
+                        {% if message.message_type == 'system' %}
+                            <div class="message system">
+                                <div class="message-bubble">
+                                    {{ message.content }}
                                 </div>
-                                
-                                <div class="message-wrapper" {% if message.sender == request.user %}style="flex-direction: row-reverse; margin-left: auto; justify-content: flex-end;"{% endif %}>
+                            </div>
+                        {% else %}
+                            <div class="message {% if message.sender == request.user %}own{% else %}other{% endif %}">
+                                <div class="d-flex {% if message.sender == request.user %}flex-row-reverse{% endif %} align-items-end mb-3">
                                     <!-- 頭像 -->
                                     {% if message.sender.social_profile.avatar %}
                                         <img src="{{ message.sender.social_profile.avatar.url }}" 
@@ -371,8 +295,22 @@
                                         </div>
                                     {% endif %}
                                     
-                                    <div class="flex-grow-1">
-                                        <div class="message-bubble" {% if message.sender == request.user %}style="background: white !important; color: #333 !important; border-bottom-right-radius: 2px; border-top-left-radius: 18px; border-top-right-radius: 18px; border-bottom-left-radius: 18px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"{% endif %}>
+                                    <div class="{% if message.sender == request.user %}me-3 d-flex flex-column align-items-end{% else %}ms-3 d-flex flex-column align-items-start{% endif %}" style="max-width: 85%;">
+                                        <!-- 發送者姓名 -->
+                                        {% if message.sender != request.user or room.room_type == 'group' %}
+                                            <div class="mb-1 {% if message.sender == request.user %}text-end{% endif %}">
+                                                <small class="text-muted">
+                                                    {% if message.sender == request.user %}
+                                                        您
+                                                    {% else %}
+                                                        {{ message.sender.username }}
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <!-- 消息氣泡 -->
+                                        <div class="message-bubble {% if message.sender == request.user %}own{% else %}other{% endif %}">
                                             {% if message.reply_to %}
                                                 <div class="reply-preview">
                                                     <strong>{{ message.reply_to.sender.username }}:</strong>
@@ -384,8 +322,9 @@
                                                 <img src="{{ message.image.url }}" alt="圖片" class="message-image" 
                                                      onclick="showImageModal('{{ message.image.url }}')">
                                             {% elif message.message_type == 'file' and message.file %}
-                                                <a href="{{ message.file.url }}" target="_blank" style="color: #007bff !important; text-decoration: underline !important; font-weight: 600 !important;">
-                                                    <i class="fas fa-file me-2" style="color: #007bff !important;"></i>{{ message.file.name }}
+                                                <a href="{{ message.file.url }}" target="_blank" 
+                                                   style="color: #007bff !important; text-decoration: underline !important; font-weight: 600 !important;">
+                                                    <i class="fas fa-file me-2"></i>{{ message.file.name }}
                                                 </a>
                                             {% endif %}
                                             
@@ -394,13 +333,31 @@
                                             {% endif %}
                                         </div>
                                         
-                                        <div class="message-info">
+                                        <!-- 消息信息 -->
+                                        <div class="message-info {% if message.sender == request.user %}text-end{% endif %}">
                                             {{ message.created_at|date:"H:i" }}
                                             {% if message.sender == request.user %}
                                                 <i class="fas fa-check text-muted ms-1"></i>
                                             {% endif %}
                                         </div>
                                     </div>
+                                    
+                                    <!-- 消息選項 -->
+                                    {% if message.sender == request.user %}
+                                        <div class="dropdown ms-2">
+                                            <button class="btn btn-link btn-sm p-0 text-muted" data-bs-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a class="dropdown-item" href="#" onclick="replyToMessage({{ message.id }}, '{{ message.content|truncatechars:30|escapejs }}')">
+                                                    <i class="fas fa-reply me-2"></i>回覆
+                                                </a></li>
+                                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteMessage({{ message.id }})">
+                                                    <i class="fas fa-trash me-2"></i>刪除
+                                                </a></li>
+                                            </ul>
+                                        </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endif %}
@@ -415,13 +372,14 @@
                 <!-- 聊天輸入區域 -->
                 <div class="chat-input-container">
                     <!-- 回覆預覽 -->
-                    <div id="replyPreview" class="reply-preview mb-2" style="display: none;">
+                    <div id="replyPreview" class="mb-2" style="display: none; background: #e3f2fd; border: 2px solid #2196f3; border-radius: 10px; padding: 12px 15px; box-shadow: 0 2px 8px rgba(33, 150, 243, 0.2);">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div>
+                            <div style="color: #1976d2; font-weight: 500;">
+                                <i class="fas fa-reply me-2"></i>
                                 <strong>回覆 <span id="replyToUser"></span>:</strong>
-                                <span id="replyToContent"></span>
+                                <span id="replyToContent" style="color: #424242; font-style: italic;"></span>
                             </div>
-                            <button type="button" class="btn btn-link btn-sm p-0" onclick="cancelReply()">
+                            <button type="button" class="btn btn-link btn-sm p-0" onclick="cancelReply()" style="color: #666;">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
@@ -601,9 +559,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // 回覆消息
-function replyToMessage(messageId, username, content) {
+function replyToMessage(messageId, content) {
     document.getElementById('replyToId').value = messageId;
-    document.getElementById('replyToUser').textContent = username;
+    document.getElementById('replyToUser').textContent = '用戶';
     document.getElementById('replyToContent').textContent = content;
     document.getElementById('replyPreview').style.display = 'block';
     document.getElementById('messageInput').focus();
