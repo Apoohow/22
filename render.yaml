@@ -2,9 +2,9 @@ services:
   - type: web
     name: ncufoodmap
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi:application
-    rootDirectory: foodmap/NCUFOODMAP_DJANGO
+    rootDirectory: .
+    buildCommand: cd foodmap/NCUFOODMAP_DJANGO && pip install -r requirements.txt
+    startCommand: cd foodmap/NCUFOODMAP_DJANGO && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn core.wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
